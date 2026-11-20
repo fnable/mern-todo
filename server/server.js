@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const connectDB = require('./config/db');
 const todoRoutes = require('./routes/todoRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
 
 // Todo API routes
 app.use('/api/todos', todoRoutes);
+app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 5001;
 
