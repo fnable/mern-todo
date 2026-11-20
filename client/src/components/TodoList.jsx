@@ -1,17 +1,21 @@
 
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
+import AddTodo from './AddTodo';
+import FilterTodo from './FilterTodo';
+import { useAuth } from '../context/AuthContext';
 
 function TodoList() {
     const [todos, setTodos] = useState([]);
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+    const [search, setSearch] = useState('');
+    const [filter, setFilter] = useState('all');
     const [loading, setLoading] = useState(true);
 
     // Edit states
     const [editingId, setEditingId] = useState(null);
     const [editTitle, setEditTitle] = useState('');
     const [editDescription, setEditDescription] = useState('');
+    const { user, logout } = useAuth();
 
     const fetchTodos = async () => {
         try {
@@ -28,18 +32,29 @@ function TodoList() {
         fetchTodos();
     }, []);
 
-    const addTodo = async (e) => {
-        e.preventDefault();
+    const filteredTodos = todos.filter((todo) => {
+        const searchTerm = search.toLowerCase();
 
-        if (!title.trim()) return;
+        const matchesSearch =
+            todo.title.toLowerCase().includes(searchTerm) ||
+            (todo.description || '').toLowerCase().includes(searchTerm);
 
+        const matchesFilter =
+            filter === 'all' ||
+            (filter === 'pending' && !todo.completed) ||
+            (filter === 'completed' && todo.completed);
+
+        return matchesSearch && matchesFilter;
+    });
+
+    const addTodo = async ({ title, description }) => {
         try {
             await api.post('/todos', { title, description });
-            setTitle('');
-            setDescription('');
             fetchTodos();
+            return true;
         } catch (error) {
             console.error('Error adding todo:', error);
+            return false;
         }
     };
 
@@ -105,31 +120,35 @@ function TodoList() {
 
     return (
         <div className="todo-container">
-            <h1>My Todo App</h1>
+            <div className="todo-header">
+                <div>
+                    <h1>My Todo App</h1>
+                    <p>Welcome, {user?.name}!</p>
+                </div>
 
-            <form onSubmit={addTodo}>
-                <input
-                    type="text"
-                    placeholder="Todo title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
-                />
+                <button onClick={logout} className="logout-button">
+                    Logout
+                </button>
+            </div>
 
-                <textarea
-                    placeholder="Description (optional)"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                />
+            <AddTodo onAdd={addTodo} />
 
-                <button type="submit">Add Todo</button>
-            </form>
+            <FilterTodo
+                search={search}
+                filter={filter}
+                onSearchChange={setSearch}
+                onFilterChange={setFilter}
+            />
 
             <div className="todo-list">
-                {todos.length === 0 ? (
-                    <p>No todos yet. Add one!</p>
+                {filteredTodos.length === 0 ? (
+                    <p>
+                        {todos.length === 0
+                            ? 'No todos yet. Add one!'
+                            : 'No matching todos found.'}
+                    </p>
                 ) : (
-                    todos.map((todo) => (
+                    filteredTodos.map((todo) => (
                         <div key={todo._id} className="todo-item">
                             {editingId === todo._id ? (
                                 // Edit form

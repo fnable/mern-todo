@@ -92,6 +92,106 @@ button:hover {
     background: #f59e0b;
 }
 
+.todo-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-buttons button {
+    background: #e5e7eb;
+    color: #333;
+    margin: 0;
+}
+
+.filter-buttons button.active {
+    background: #2563eb;
+    color: white;
+}
+
+.todo-controls input {
+    width: 100%;
+}
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.auth-form {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-form h1 {
+    margin: 0;
+    text-align: center;
+}
+
+.auth-form p {
+    text-align: center;
+    color: #666;
+    margin: 0;
+}
+
+.auth-form a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.auth-form button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.auth-error {
+    color: #dc2626 !important;
+    background: #fee2e2;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.todo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.todo-header h1 {
+    margin: 0 0 5px;
+    text-align: left;
+}
+
+.todo-header p {
+    margin: 0;
+    color: #666;
+}
+
+.logout-button {
+    background: #dc2626;
+    margin: 0;
+}
+
+
 @media (max-width: 500px) {
     .todo-item {
         flex-direction: column;
