@@ -3,8 +3,8 @@ const cors = require('cors');
 require('dotenv').config();
 
 const connectDB = require('./config/db');
-const todoRoutes = require('./routes/todoRoutes');
-const authRoutes = require('./routes/authRoutes');
+const todoRoutes = require('./Routes/todoRoutes');
+const authRoutes = require('./Routes/authRoutes');
 
 const app = express();
 
@@ -27,8 +27,8 @@ const PORT = process.env.PORT || 5001;
 const startServer = async () => {
     await connectDB();
 
-    app.listen(PORT, '127.0.0.1', () => {
-        console.log(`Server running at http://127.0.0.1:${PORT}`);
+    app.listen(PORT, () => {
+        console.log(`Server listening on port ${PORT}`);
     });
 };
 
